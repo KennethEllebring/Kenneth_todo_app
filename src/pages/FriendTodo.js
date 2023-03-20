@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import axios from "axios";
-import "./css/Home.scss";
+import "./styles/Home.scss";
 
 const FriendTodo = () => {
   const [todos, setTodos] = useState([]);

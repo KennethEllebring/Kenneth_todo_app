@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {useParams, Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {toast} from "react-toastify";
-import "./css/AddEditTodo.scss";
+import "./styles/AddEditTodo.scss";
 
 const initialState = {todo: ""};
 

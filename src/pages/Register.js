@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import "./css/Register.scss";
+import "./styles/Register.scss";
 
 function Register() {
   const [username, setUsername] = useState("");

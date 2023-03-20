@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import axios from "axios";
-import "./css/UserList.scss";
+import "./styles/UserList.scss";
 
 const UserList = () => {
   const [user, setUser] = useState([]);

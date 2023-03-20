@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import "./css/Login.scss";
+import "./styles/Login.scss";
 
 function Login() {
   const [username, setUsername] = useState("");

@@ -9,7 +9,7 @@ import UserList from "./pages/UserList.js";
 import AddEditTodo from "./pages/AddEditTodo";
 import FriendTodo from "./pages/FriendTodo";
 import NotFound from "./pages/Notfound";
-import "./pages/css/App.scss";
+import "./pages/styles/App.scss";
 
 function App() {
   return (
