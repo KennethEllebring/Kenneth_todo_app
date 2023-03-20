@@ -11,12 +11,12 @@ Install all dependencies by typing in terminal:
 You also need to add a ".env" file in the root directory of the program with the following info:
 
 ```
-DB_HOST = ""
+DB_HOST = "localhost"
 DB_USERNAME = ""
 DB_PASSWORD = ""
-DB_DATABASE = ""
+DB_DATABASE = "todo_app"
 
-# set your database info inside of the quotes ""
+# set your database info inside of the quotes "", textfile for setting up database included in repo.
 ```
 
 Start the server by typing in terminal:
