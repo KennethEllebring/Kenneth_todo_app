@@ -1,0 +1,26 @@
+CREATE DATABASE todo_app;
+
+CREATE TABLE user (
+    id INT AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    PRIMARY KEY (ID, username),
+    CONSTRAINT CHK_username CHECK (username > '')
+);
+
+CREATE TABLE todo (
+    id INT AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+	todo VARCHAR(255) NOT NULL,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (username) REFERENCES user(username)
+);
+
+CREATE TABLE friend (
+    id INT AUTO_INCREMENT,
+    username VARCHAR(255),
+    friendname VARCHAR(255),
+    PRIMARY KEY (ID),
+    FOREIGN KEY (username) REFERENCES user(username),
+    UNIQUE KEY uniqID (username, friendname)
+);
