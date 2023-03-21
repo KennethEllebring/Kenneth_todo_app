@@ -32,7 +32,7 @@ const Home = () => {
     if (window.confirm("Are you sure you are done with this and want to delete?")) {
       axios.delete(`http://localhost:5000/todo/delete/${id}`, {withCredentials: true});
       toast.success("Todo removed succefully");
-      setTimeout(() => loadTodo(), 1000);
+      setTimeout(() => loadTodo(), 200);
     }
   };
 

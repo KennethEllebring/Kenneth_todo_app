@@ -10,7 +10,6 @@ const db = mysql.createPool({
 
 exports.userList = (req, res) => {
   const sqlGetUsers = "SELECT id, username FROM user";
-
   db.execute(sqlGetUsers, (error, result) => {
     if (error) {
       if (error.errno === -4078) {

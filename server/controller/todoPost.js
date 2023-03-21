@@ -8,16 +8,27 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
-const {parseCookie} = require("../utility/utils");
+const joi = require("joi");
+const schema = joi.object({
+  username: joi.string().max(255).required(),
+  todo: joi.string().min(1).max(500).required(),
+});
 
 exports.todoPost = (req, res) => {
-  const {loginCookie} = parseCookie(req.headers.cookie);
+  const username = req.username;
   const {todo} = req.body;
-  sqlPost = "INSERT INTO todo (username, todo) VALUES (? , ?)";
 
-  db.execute(sqlPost, [loginCookie, todo], (error, result) => {
-    if (error) {
-      console.log(error);
-    }
-  });
+  const validation = schema.validate({username: username, todo: todo});
+  if (!validation.error) {
+    const sqlPost = "INSERT INTO todo (username, todo) VALUES (? , ?)";
+
+    db.execute(sqlPost, [username, todo], (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+    });
+  } else {
+    console.log(validation.error.message);
+    res.status(406).send(validation.error.message);
+  }
 };

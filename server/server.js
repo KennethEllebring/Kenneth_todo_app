@@ -3,6 +3,7 @@ const cors = require("cors");
 const port = 5000;
 
 const {verifyLogin} = require("./utility/authorisation");
+const {jwtValidation} = require("./utility/validation");
 
 const {userLogin} = require("./controller/userLogin.js");
 const {userReg} = require("./controller/userReg.js");
@@ -26,24 +27,24 @@ app.post("/userLogin", userLogin);
 
 app.post("/userReg", userReg);
 
-app.get("/userList/get", verifyLogin, userList);
+app.get("/userList/get", [verifyLogin, jwtValidation], userList);
 
-app.get("/todo/get", verifyLogin, todoGetAll);
+app.get("/todo/get", [verifyLogin, jwtValidation], todoGetAll);
 
-app.get("/todo/get/:id", verifyLogin, todoGetId);
+app.get("/todo/get/:id", [verifyLogin, jwtValidation], todoGetId);
 
-app.patch("/todo/patch/:id", verifyLogin, todoPatch);
+app.patch("/todo/patch/:id", [verifyLogin, jwtValidation], todoPatch);
 
-app.post("/todo/post", verifyLogin, todoPost);
+app.post("/todo/post", [verifyLogin, jwtValidation], todoPost);
 
-app.delete("/todo/delete/:id", verifyLogin, todoDelete);
+app.delete("/todo/delete/:id", [verifyLogin, jwtValidation], todoDelete);
 
-app.get("/friends/get", verifyLogin, friendsGet);
+app.get("/friends/get", [verifyLogin, jwtValidation], friendsGet);
 
-app.post("/friend/add", verifyLogin, friendAdd);
+app.post("/friend/add", [verifyLogin, jwtValidation], friendAdd);
 
-app.get("/friend/:id", verifyLogin, friendTodo);
+app.get("/friend/:id", [verifyLogin, jwtValidation], friendTodo);
 
-app.delete("/friend/delete/:id", verifyLogin, friendDelete);
+app.delete("/friend/delete/:id", [verifyLogin, jwtValidation], friendDelete);
 
 app.listen(port, () => console.log(`server running on port ${port}`));

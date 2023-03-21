@@ -8,26 +8,38 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
+const joi = require("joi");
+const schema = joi.object({
+  id: joi.required(),
+});
+
 exports.todoGetId = (req, res) => {
   const {id} = req.params;
-  const sqlGet = "SELECT * FROM todo WHERE id = ?";
 
-  db.execute(sqlGet, [id], (error, result) => {
-    if (error) {
-      if (error.errno === -4078) {
-        console.log(error);
-        res.status(503).send("Can't connect to server right now, please reload page and try again");
+  const validation = schema.validate({id: id});
+  if (!validation.error) {
+    const sqlGet = "SELECT * FROM todo WHERE id = ?";
+
+    db.execute(sqlGet, [id], (error, result) => {
+      if (error) {
+        if (error.errno === -4078) {
+          console.log(error);
+          res.status(503).send("Can't connect to server right now, please reload page and try again");
+        } else {
+          console.log(error);
+          res.status(400).send("Something went wrong, please reload page and try again");
+        }
       } else {
-        console.log(error);
-        res.status(400).send("Something went wrong, please reload page and try again");
+        if (result[0] === undefined) {
+          res.status(200).send("You don't have any ToDos");
+        } else {
+          console.log(result);
+          res.status(200).send(result);
+        }
       }
-    } else {
-      if (result[0] === undefined) {
-        res.status(200).send("You don't have any ToDos");
-      } else {
-        console.log(result);
-        res.status(200).send(result);
-      }
-    }
-  });
+    });
+  } else {
+    console.log(validation.error.message);
+    res.status(406).send(validation.error.message);
+  }
 };

@@ -38,12 +38,10 @@ exports.userReg = (req, res) => {
           res.status(400).send("Something went wrong, please reload page and try again");
         }
       } else {
-        console.log(result);
         res.status(201).send("Added new user");
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

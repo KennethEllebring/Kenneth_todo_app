@@ -8,13 +8,24 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
+const joi = require("joi");
+const schema = joi.object({
+  id: joi.number().required(),
+});
+
 exports.friendDelete = (req, res) => {
   const {id} = req.params;
-  sqlDelete = "DELETE FROM friend WHERE id = ?";
+  const validation = schema.validate({id: id});
+  if (!validation.error) {
+    const sqlDelete = "DELETE FROM friend WHERE id = ?";
 
-  db.execute(sqlDelete, [id], (error, result) => {
-    if (error) {
-      console.log(error);
-    }
-  });
+    db.execute(sqlDelete, [id], (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+    });
+  } else {
+    console.log(validation.error.message);
+    res.status(406).send(validation.error.message);
+  }
 };

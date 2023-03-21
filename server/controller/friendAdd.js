@@ -8,21 +8,31 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
-const {parseCookie} = require("../utility/utils");
+const joi = require("joi");
+const schema = joi.object({
+  username: joi.string().max(255).required(),
+  friendName: joi.string().max(80).required(),
+});
 
 exports.friendAdd = (req, res) => {
-  const {loginCookie} = parseCookie(req.headers.cookie);
+  const username = req.username;
   const {friendName} = req.body;
-  console.log(loginCookie + friendName);
-  sqlFriend = "INSERT INTO friend (username, friendname) VALUES (? , ?)";
 
-  db.execute(sqlFriend, [loginCookie, friendName], (error, result) => {
-    if (error) {
-      console.log(error);
-      res.status(409).send("You are allready friends");
-    } else {
-      console.log(result);
-      res.status(201).send("added new friend");
-    }
-  });
+  const validation = schema.validate({username: username, friendName: friendName});
+  if (!validation.error) {
+    const sqlFriend = "INSERT INTO friend (username, friendname) VALUES (? , ?)";
+
+    db.execute(sqlFriend, [username, friendName], (error, result) => {
+      if (error) {
+        console.log(error);
+        res.status(409).send("You are allready friends");
+      } else {
+        console.log(result);
+        res.status(201).send("added new friend");
+      }
+    });
+  } else {
+    console.log(validation.error.message);
+    res.status(406).send(validation.error.message);
+  }
 };

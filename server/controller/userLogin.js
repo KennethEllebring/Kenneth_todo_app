@@ -9,8 +9,9 @@ const db = mysql.createPool({
 });
 
 const bcrypt = require("bcrypt");
-
 const joi = require("joi");
+const jwt = require("jsonwebtoken");
+
 const schema = joi.object({
   username: joi.string().min(3).max(255).required(),
   password: joi.string().min(6).max(255).required(),
@@ -18,8 +19,7 @@ const schema = joi.object({
 
 exports.userLogin = function userLogin(req, res) {
   const {username, password} = req.body;
-  // ta bort
-  console.log(username, password);
+
   const validation = schema.validate({username: username, password: password});
   if (!validation.error) {
     const loginUser = "SELECT password FROM user WHERE username = ?";
@@ -36,8 +36,9 @@ exports.userLogin = function userLogin(req, res) {
 
           bcrypt.compare(password, hashedPassword, function (error, result) {
             if (result === true) {
+              const token = jwt.sign({username: username}, process.env.JWT_SECRET, {expiresIn: "10m"});
               return res
-                .cookie("loginCookie", username, {
+                .cookie("loginCookie", token, {
                   maxAge: 1000 * 60 * 10,
                   path: "/",
                   httpOnly: true,
