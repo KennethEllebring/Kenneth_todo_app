@@ -23,7 +23,6 @@ exports.userList = (req, res) => {
       if (result[0] === undefined) {
         res.status(200).send("You don't have any");
       } else {
-        console.log(result);
         res.status(200).send(result);
       }
     }

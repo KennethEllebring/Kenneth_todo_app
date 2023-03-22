@@ -13,14 +13,13 @@ const schema = joi.object({
   username: joi.string().max(255).required(),
 });
 
-exports.friendsGet = (req, res) => {
+exports.todoGetAll = (req, res) => {
   const username = req.username;
-
   const validation = schema.validate({username: username});
   if (!validation.error) {
-    const sqlFriendsGet = "SELECT id, friendname FROM friend WHERE username = ?";
+    const sqlGet = "SELECT * FROM todo WHERE username = ?";
 
-    db.execute(sqlFriendsGet, [username], (error, result) => {
+    db.execute(sqlGet, [username], (error, result) => {
       if (error) {
         if (error.errno === -4078) {
           console.log(error);
@@ -31,15 +30,13 @@ exports.friendsGet = (req, res) => {
         }
       } else {
         if (result[0] === undefined) {
-          res.status(200).send("You don't have any Friends");
+          res.status(200).send("You don't have any ToDos");
         } else {
-          console.log(result);
           res.status(200).send(result);
         }
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

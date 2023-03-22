@@ -27,12 +27,10 @@ exports.friendAdd = (req, res) => {
         console.log(error);
         res.status(409).send("You are allready friends");
       } else {
-        console.log(result);
         res.status(201).send("added new friend");
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

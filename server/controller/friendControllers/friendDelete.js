@@ -10,25 +10,21 @@ const db = mysql.createPool({
 
 const joi = require("joi");
 const schema = joi.object({
-  username: joi.string().max(255).required(),
-  todo: joi.string().min(1).max(500).required(),
+  id: joi.number().required(),
 });
 
-exports.todoPost = (req, res) => {
-  const username = req.username;
-  const {todo} = req.body;
-
-  const validation = schema.validate({username: username, todo: todo});
+exports.friendDelete = (req, res) => {
+  const {id} = req.params;
+  const validation = schema.validate({id: id});
   if (!validation.error) {
-    const sqlPost = "INSERT INTO todo (username, todo) VALUES (? , ?)";
+    const sqlDelete = "DELETE FROM friend WHERE id = ?";
 
-    db.execute(sqlPost, [username, todo], (error, result) => {
+    db.execute(sqlDelete, [id], (error, result) => {
       if (error) {
         console.log(error);
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

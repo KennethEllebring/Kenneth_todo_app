@@ -26,7 +26,6 @@ exports.todoDelete = (req, res) => {
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

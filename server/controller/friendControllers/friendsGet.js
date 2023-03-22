@@ -10,17 +10,17 @@ const db = mysql.createPool({
 
 const joi = require("joi");
 const schema = joi.object({
-  id: joi.string().max(80).required(),
+  username: joi.string().max(255).required(),
 });
 
-exports.friendTodo = (req, res) => {
-  const {id} = req.params;
+exports.friendsGet = (req, res) => {
+  const username = req.username;
 
-  const validation = schema.validate({id: id});
+  const validation = schema.validate({username: username});
   if (!validation.error) {
-    const sqlGet = "SELECT * FROM todo WHERE username = ?";
+    const sqlFriendsGet = "SELECT id, friendname FROM friend WHERE username = ?";
 
-    db.execute(sqlGet, [id], (error, result) => {
+    db.execute(sqlFriendsGet, [username], (error, result) => {
       if (error) {
         if (error.errno === -4078) {
           console.log(error);
@@ -31,15 +31,13 @@ exports.friendTodo = (req, res) => {
         }
       } else {
         if (result[0] === undefined) {
-          res.status(200).send("Friend don't have any ToDos");
+          res.status(200).send("You don't have any Friends");
         } else {
-          console.log(result);
           res.status(200).send(result);
         }
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

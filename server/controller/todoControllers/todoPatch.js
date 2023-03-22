@@ -11,16 +11,20 @@ const db = mysql.createPool({
 const joi = require("joi");
 const schema = joi.object({
   username: joi.string().max(255).required(),
+  todo: joi.string().min(1).max(500).required(),
+  id: joi.number().required(),
 });
 
-exports.todoGetAll = (req, res) => {
+exports.todoPatch = (req, res) => {
   const username = req.username;
+  const {todo} = req.body;
+  const {id} = req.params;
 
-  const validation = schema.validate({username: username});
+  const validation = schema.validate({username: username, todo: todo, id: id});
   if (!validation.error) {
-    const sqlGet = "SELECT * FROM todo WHERE username = ?";
+    const sqlUpdate = "UPDATE todo SET username = ?, todo = ? WHERE id = ?";
 
-    db.execute(sqlGet, [username], (error, result) => {
+    db.execute(sqlUpdate, [username, todo, id], (error, result) => {
       if (error) {
         if (error.errno === -4078) {
           console.log(error);
@@ -38,7 +42,6 @@ exports.todoGetAll = (req, res) => {
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

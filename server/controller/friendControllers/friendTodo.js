@@ -10,21 +10,17 @@ const db = mysql.createPool({
 
 const joi = require("joi");
 const schema = joi.object({
-  username: joi.string().max(255).required(),
-  todo: joi.string().min(1).max(500).required(),
-  id: joi.number().required(),
+  id: joi.string().max(80).required(),
 });
 
-exports.todoPatch = (req, res) => {
-  const username = req.username;
-  const {todo} = req.body;
+exports.friendTodo = (req, res) => {
   const {id} = req.params;
 
-  const validation = schema.validate({username: username, todo: todo, id: id});
+  const validation = schema.validate({id: id});
   if (!validation.error) {
-    const sqlUpdate = "UPDATE todo SET username = ?, todo = ? WHERE id = ?";
+    const sqlGet = "SELECT * FROM todo WHERE username = ?";
 
-    db.execute(sqlUpdate, [username, todo, id], (error, result) => {
+    db.execute(sqlGet, [id], (error, result) => {
       if (error) {
         if (error.errno === -4078) {
           console.log(error);
@@ -35,15 +31,13 @@ exports.todoPatch = (req, res) => {
         }
       } else {
         if (result[0] === undefined) {
-          res.status(200).send("You don't have any ToDos");
+          res.status(200).send("Friend don't have any ToDos");
         } else {
-          console.log(result);
           res.status(200).send(result);
         }
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

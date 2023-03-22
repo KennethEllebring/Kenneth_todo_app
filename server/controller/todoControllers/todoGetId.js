@@ -33,13 +33,11 @@ exports.todoGetId = (req, res) => {
         if (result[0] === undefined) {
           res.status(200).send("You don't have any ToDos");
         } else {
-          console.log(result);
           res.status(200).send(result);
         }
       }
     });
   } else {
-    console.log(validation.error.message);
     res.status(406).send(validation.error.message);
   }
 };

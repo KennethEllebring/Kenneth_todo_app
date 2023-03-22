@@ -9,7 +9,7 @@ const Friends = () => {
   const navigate = useNavigate();
 
   const loadFriends = async () => {
-    const response = await axios.get("http://localhost:5000/friends/get", {withCredentials: true}).catch(function (error) {
+    const response = await axios.get("http://localhost:5000/friend/get", {withCredentials: true}).catch(function (error) {
       if (error.response) toast.error(error.response.data);
       navigate("/");
       return;
